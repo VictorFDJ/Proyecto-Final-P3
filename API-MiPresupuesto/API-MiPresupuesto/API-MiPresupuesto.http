@@ -1,0 +1,47 @@
+@host = http://localhost:5044
+@token = pega-aqui-el-token
+
+### Estado de la API
+GET {{host}}/health
+
+### Registro
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Ana Pérez",
+  "email": "ana@example.com",
+  "password": "Clave1234"
+}
+
+### Inicio de sesión
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "ana@example.com",
+  "password": "Clave1234"
+}
+
+### Consultar perfil
+GET {{host}}/api/profile
+Authorization: Bearer {{token}}
+
+### Cambiar nombre
+PUT {{host}}/api/profile/name
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Ana María Pérez"
+}
+
+### Cambiar contraseña
+PUT {{host}}/api/profile/password
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "currentPassword": "Clave1234",
+  "newPassword": "NuevaClave5678"
+}

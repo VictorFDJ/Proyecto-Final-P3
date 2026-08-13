@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="MiPresupuesto.Domain/MiPresupuesto.Domain.csproj" />
+  <Project Path="MiPresupuesto.Application/MiPresupuesto.Application.csproj" />
+  <Project Path="MiPresupuesto.Infrastructure/MiPresupuesto.Infrastructure.csproj" />
+  <Project Path="API-MiPresupuesto/API-MiPresupuesto.csproj" />
+  <Project Path="MiPresupuesto.Tests/MiPresupuesto.Tests.csproj" />
+</Solution>
