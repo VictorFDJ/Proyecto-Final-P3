@@ -4,6 +4,7 @@ import { ArrowRight, BarChart3, Check, Eye, EyeOff, LockKeyhole, Mail, Sparkles,
 import { useAuth } from '../auth/AuthContext'
 import { ApiError } from '../lib/api'
 import { FieldError } from '../components/UI'
+import { passwordResetEnabled } from '../lib/features'
 
 export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
   const auth = useAuth(); const navigate = useNavigate()
@@ -41,7 +42,7 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
         {mode === 'register' && <label><span>Nombre completo</span><div className="input-with-icon"><UserRound/><input value={form.name} onChange={e => setForm({...form, name:e.target.value})} placeholder="Ana Pérez" autoComplete="name"/></div><FieldError errors={errors} name="name"/></label>}
         <label><span>Correo electrónico</span><div className="input-with-icon"><Mail/><input type="email" value={form.email} onChange={e => setForm({...form, email:e.target.value})} placeholder="tu@correo.com" autoComplete="email"/></div><FieldError errors={errors} name="email"/></label>
         <label><span>Contraseña</span><div className="input-with-icon"><LockKeyhole/><input type={visible?'text':'password'} value={form.password} onChange={e => setForm({...form, password:e.target.value})} placeholder="Mínimo 8 caracteres" autoComplete={mode==='login'?'current-password':'new-password'}/><button type="button" onClick={() => setVisible(!visible)}>{visible?<EyeOff/>:<Eye/>}</button></div><FieldError errors={errors} name="password"/></label>
-        {mode === 'login' && <Link className="forgot-link" to="/recuperar-contrasena">¿Olvidaste tu contraseña?</Link>}
+        {mode === 'login' && passwordResetEnabled && <Link className="forgot-link" to="/recuperar-contrasena">¿Olvidaste tu contraseña?</Link>}
         <button className="btn primary auth-submit" disabled={busy}>{busy ? 'Procesando...' : mode === 'login' ? 'Entrar' : 'Crear mi cuenta'}<ArrowRight size={18}/></button>
         <div className="auth-switch">{mode === 'login' ? <>¿Aún no tienes cuenta? <Link to="/registro">Regístrate gratis</Link></> : <>¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link></>}</div>
       </form>

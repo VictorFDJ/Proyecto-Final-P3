@@ -9,7 +9,7 @@ RUN dotnet restore "API-MiPresupuesto/API-MiPresupuesto/API-MiPresupuesto.csproj
 
 COPY API-MiPresupuesto/ API-MiPresupuesto/
 WORKDIR /src/API-MiPresupuesto/API-MiPresupuesto
-RUN dotnet publish "API-MiPresupuesto.csproj" -c Release -o /app/publish --no-restore /p:UseAppHost=false
+RUN dotnet publish "API-MiPresupuesto.csproj" -c Release -o /app/publish --no-restore /p:UseAppHost=false /p:SkipFrontendBuild=true
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app

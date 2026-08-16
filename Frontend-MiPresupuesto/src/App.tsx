@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from './auth/AuthContext'
 import { AppLayout } from './components/AppLayout'
 import { Spinner } from './components/UI'
+import { passwordResetEnabled } from './lib/features'
 
 const AuthPage = lazy(() => import('./pages/AuthPage').then(module => ({ default: module.AuthPage })))
 const DashboardPage = lazy(() => import('./pages/DashboardPage').then(module => ({ default: module.DashboardPage })))
@@ -21,7 +22,7 @@ export default function App() {
   return <BrowserRouter><Suspense fallback={<Spinner/>}><Routes>
     <Route path="/login" element={<AuthPage mode="login"/>}/>
     <Route path="/registro" element={<AuthPage mode="register"/>}/>
-    <Route path="/recuperar-contrasena" element={<ForgotPasswordPage/>}/>
+    <Route path="/recuperar-contrasena" element={passwordResetEnabled ? <ForgotPasswordPage/> : <Navigate to="/login" replace/>}/>
     <Route element={<Protected/>}>
       <Route index element={<DashboardPage/>}/>
       <Route path="gastos" element={<ExpensesPage/>}/>

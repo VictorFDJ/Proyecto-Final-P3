@@ -96,12 +96,15 @@ if (httpsRedirectionEnabled)
 {
     app.UseHttpsRedirection();
 }
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.UseCors("Frontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapGet("/health", () => Results.Ok(new { status = "ok", timestampUtc = DateTime.UtcNow }))
     .AllowAnonymous();
+app.MapFallbackToFile("index.html");
 
 app.Run();
 

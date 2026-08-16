@@ -102,6 +102,10 @@ El archivo `API-MiPresupuesto/API-MiPresupuesto/API-MiPresupuesto.http` contiene
 
 El archivo [`GUIA-DEFENSA.md`](GUIA-DEFENSA.md) contiene el orden recomendado para la demostración, la explicación de la arquitectura y respuestas breves a preguntas técnicas frecuentes.
 
+## Despliegue público
+
+El archivo [`DESPLIEGUE-PUBLICO.md`](DESPLIEGUE-PUBLICO.md) explica cómo publicar React, la API y MSSQL bajo un mismo sitio HTTPS, manteniendo las credenciales fuera del repositorio.
+
 ## Funcionalidades implementadas
 
 - Registro, inicio de sesión con JWT y edición de perfil.

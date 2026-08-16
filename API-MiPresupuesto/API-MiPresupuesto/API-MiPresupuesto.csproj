@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>API_MiPresupuesto</RootNamespace>
+    <FrontendRoot>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)/../../Frontend-MiPresupuesto'))</FrontendRoot>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,4 +19,19 @@
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
   </ItemGroup>
+
+  <Target Name="PublishFrontend"
+          BeforeTargets="ComputeFilesToPublish"
+          Condition="'$(SkipFrontendBuild)' != 'true'">
+    <Exec WorkingDirectory="$(FrontendRoot)" Command="npm ci" />
+    <Exec WorkingDirectory="$(FrontendRoot)" Command="npm run build" EnvironmentVariables="VITE_API_URL=/api;VITE_PASSWORD_RESET_ENABLED=false" />
+    <ItemGroup>
+      <FrontendFiles Include="$(FrontendRoot)/dist/**/*" />
+      <ResolvedFileToPublish Include="@(FrontendFiles->'%(FullPath)')">
+        <RelativePath>wwwroot/%(RecursiveDir)%(Filename)%(Extension)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
 </Project>
