@@ -18,6 +18,7 @@ public sealed class AuthServiceTests
         var response = await service.RegisterAsync(
             new RegisterRequest("  Ana Pérez  ", "ANA@EXAMPLE.COM", "Clave123"));
 
+        Assert.NotNull(response);
         var savedUser = Assert.Single(_users.Items);
         Assert.Equal("Ana Pérez", savedUser.Name);
         Assert.Equal("ana@example.com", savedUser.Email);
@@ -28,13 +29,15 @@ public sealed class AuthServiceTests
     }
 
     [Fact]
-    public async Task RegisterAsync_WhenEmailExists_ThrowsConflict()
+    public async Task RegisterAsync_WhenEmailExists_ReturnsNull()
     {
         _users.Items.Add(CreateUser("ana@example.com", "Clave123"));
         var service = CreateService();
 
-        await Assert.ThrowsAsync<ConflictException>(() => service.RegisterAsync(
-            new RegisterRequest("Otra Ana", "ANA@example.com", "Otra1234")));
+        var response = await service.RegisterAsync(
+            new RegisterRequest("Otra Ana", "ANA@example.com", "Otra1234"));
+
+        Assert.Null(response);
     }
 
     [Fact]

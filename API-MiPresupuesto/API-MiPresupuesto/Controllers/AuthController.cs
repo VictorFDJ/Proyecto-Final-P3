@@ -16,7 +16,19 @@ public sealed class AuthController(IAuthService authService) : ControllerBase
         CancellationToken cancellationToken)
     {
         var response = await authService.RegisterAsync(request, cancellationToken);
-        return StatusCode(StatusCodes.Status201Created, response);
+        return response is null
+            ? Conflict(new
+            {
+                success = false,
+                error = new
+                {
+                    code = "conflict",
+                    message = "Ya existe una cuenta con este correo electrónico.",
+                    errors = (object?)null,
+                    traceId = HttpContext.TraceIdentifier
+                }
+            })
+            : StatusCode(StatusCodes.Status201Created, response);
     }
 
     [HttpPost("login")]

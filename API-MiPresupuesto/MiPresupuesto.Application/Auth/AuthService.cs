@@ -10,7 +10,7 @@ public sealed class AuthService(
     IPasswordHasher passwordHasher,
     IJwtTokenGenerator tokenGenerator) : IAuthService
 {
-    public async Task<AuthResponse> RegisterAsync(
+    public async Task<AuthResponse?> RegisterAsync(
         RegisterRequest request,
         CancellationToken cancellationToken = default)
     {
@@ -20,7 +20,7 @@ public sealed class AuthService(
 
         if (await users.EmailExistsAsync(email, cancellationToken))
         {
-            throw new ConflictException("Ya existe una cuenta con este correo electrónico.");
+            return null;
         }
 
         var user = new User
