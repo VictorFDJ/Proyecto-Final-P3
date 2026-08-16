@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MiPresupuesto.Application.Auth;
 using MiPresupuesto.Application.Categories;
+using MiPresupuesto.Application.Expenses;
 using MiPresupuesto.Application.PaymentMethods;
 using MiPresupuesto.Application.Profile;
 
@@ -14,6 +15,7 @@ public static class DependencyInjection
         services.AddScoped<IProfileService, ProfileService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IPaymentMethodService, PaymentMethodService>();
+        services.AddScoped<IExpenseService, ExpenseService>();
         return services;
     }
 }

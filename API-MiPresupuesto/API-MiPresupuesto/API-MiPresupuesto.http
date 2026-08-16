@@ -73,3 +73,20 @@ Content-Type: application/json
 ### Listar métodos de pago incluyendo inactivos
 GET {{host}}/api/payment-methods?includeInactive=true
 Authorization: Bearer {{token}}
+
+### Crear gasto (reemplaza los identificadores)
+POST {{host}}/api/expenses
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "amount": 850.50,
+  "date": "2026-08-16",
+  "categoryId": "00000000-0000-0000-0000-000000000000",
+  "paymentMethodId": "00000000-0000-0000-0000-000000000000",
+  "description": "Compra del supermercado"
+}
+
+### Listar gastos con filtros y paginación
+GET {{host}}/api/expenses?fromDate=2026-08-01&toDate=2026-08-31&page=1&pageSize=20&search=supermercado
+Authorization: Bearer {{token}}
