@@ -27,8 +27,10 @@ export function ForgotPasswordPage() {
       const response = await api<ForgotResponse>('/auth/forgot-password', {
         method: 'POST', body: JSON.stringify({ email }),
       })
-      setRequested(true); setMessage(response.message)
-      if (response.developmentToken) setToken(response.developmentToken)
+      setMessage(response.message)
+      if (response.developmentToken) {
+        setToken(response.developmentToken); setRequested(true)
+      }
     } catch (error) {
       if (error instanceof ApiError) { setMessage(error.message); setErrors(error.fields) }
       else setMessage('No se pudo conectar con el servidor.')
@@ -71,7 +73,7 @@ export function ForgotPasswordPage() {
         <div className="auth-switch"><Link to="/login"><ArrowLeft size={14}/> Volver al inicio de sesión</Link></div>
       </form> : <form className="auth-form" onSubmit={resetPassword}>
         <span className="eyebrow">NUEVA CONTRASEÑA</span><h2>Confirma el cambio</h2><p>{message}</p>
-        {token ? <div className="reset-code"><ShieldCheck/><div><strong>Código de desarrollo generado</strong><small>Ya lo colocamos automáticamente. Expira en 15 minutos.</small></div></div> : <div className="form-alert">Introduce el código recibido por correo.</div>}
+        <div className="reset-code"><ShieldCheck/><div><strong>Código temporal generado</strong><small>Ya lo colocamos automáticamente. Expira en 15 minutos.</small></div></div>
         <label><span>Código de recuperación</span><div className="input-with-icon"><KeyRound/><input value={token} onChange={event=>setToken(event.target.value)} autoComplete="one-time-code"/></div><FieldError errors={errors} name="token"/></label>
         <label><span>Nueva contraseña</span><div className="input-with-icon"><KeyRound/><input type="password" value={password} onChange={event=>setPassword(event.target.value)} autoComplete="new-password" placeholder="Mínimo 8 caracteres"/></div><FieldError errors={errors} name="newPassword"/></label>
         <label><span>Confirmar contraseña</span><div className="input-with-icon"><KeyRound/><input type="password" value={confirmation} onChange={event=>setConfirmation(event.target.value)} autoComplete="new-password"/></div><FieldError errors={errors} name="confirmation"/></label>

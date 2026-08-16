@@ -63,7 +63,11 @@ public sealed class AuthController(
     {
         var token = await authService.RequestPasswordResetAsync(request, cancellationToken);
         return Ok(new ForgotPasswordResponse(
-            "Si el correo está registrado, recibirás instrucciones para restablecer tu contraseña.",
+            environment.IsDevelopment()
+                ? token is null
+                    ? "No encontramos una cuenta registrada con ese correo."
+                    : "Código temporal generado correctamente."
+                : "Si el correo está registrado, recibirás instrucciones para restablecer tu contraseña.",
             environment.IsDevelopment() ? token : null));
     }
 
