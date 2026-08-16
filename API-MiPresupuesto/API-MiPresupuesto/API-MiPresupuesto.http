@@ -90,3 +90,23 @@ Content-Type: application/json
 ### Listar gastos con filtros y paginación
 GET {{host}}/api/expenses?fromDate=2026-08-01&toDate=2026-08-31&page=1&pageSize=20&search=supermercado
 Authorization: Bearer {{token}}
+
+### Crear presupuesto mensual (reemplaza categoryId)
+POST {{host}}/api/budgets
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "year": 2026,
+  "month": 8,
+  "categoryId": "00000000-0000-0000-0000-000000000000",
+  "amount": 10000
+}
+
+### Presupuestos del mes con consumo y alertas
+GET {{host}}/api/budgets?year=2026&month=8
+Authorization: Bearer {{token}}
+
+### Presupuestos excedidos
+GET {{host}}/api/budgets/exceeded?year=2026&month=8
+Authorization: Bearer {{token}}
