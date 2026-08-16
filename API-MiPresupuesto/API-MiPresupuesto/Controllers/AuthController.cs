@@ -9,7 +9,8 @@ namespace MiPresupuesto.Api.Controllers;
 [AllowAnonymous]
 public sealed class AuthController(
     IAuthService authService,
-    IWebHostEnvironment environment) : ControllerBase
+    IWebHostEnvironment environment,
+    IConfiguration configuration) : ControllerBase
 {
     [HttpPost("register")]
     [ProducesResponseType<AuthResponse>(StatusCodes.Status201Created)]
@@ -62,13 +63,15 @@ public sealed class AuthController(
         CancellationToken cancellationToken)
     {
         var token = await authService.RequestPasswordResetAsync(request, cancellationToken);
+        var exposeToken = environment.IsDevelopment() ||
+            configuration.GetValue<bool>("PasswordReset:ExposeToken");
         return Ok(new ForgotPasswordResponse(
-            environment.IsDevelopment()
+            exposeToken
                 ? token is null
                     ? "No encontramos una cuenta registrada con ese correo."
                     : "Código temporal generado correctamente."
                 : "Si el correo está registrado, recibirás instrucciones para restablecer tu contraseña.",
-            environment.IsDevelopment() ? token : null));
+            exposeToken ? token : null));
     }
 
     [HttpPost("reset-password")]

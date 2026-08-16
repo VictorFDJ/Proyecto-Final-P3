@@ -14,8 +14,49 @@ Aplicación web completa para registrar y analizar gastos personales. El backend
 ## Requisitos locales
 
 - .NET SDK 10.0.301 o compatible.
-- SQL Server LocalDB para desarrollo. La configuración con contenedores se añadirá antes de la entrega.
+- SQL Server LocalDB para desarrollo sin contenedores.
 - Node.js 22 o compatible y npm.
+
+Para ejecutar la aplicación completa con contenedores solamente se necesita Docker Desktop con contenedores Linux y, como mínimo, 4 GB de memoria disponible.
+
+## Ejecutar todo con Docker
+
+Desde la raíz del repositorio, crea el archivo local de variables de entorno:
+
+```powershell
+Copy-Item .\docker.env.example .\.env
+```
+
+Abre `.env` y reemplaza los dos valores de ejemplo por contraseñas propias. La clave `JWT_KEY` debe tener al menos 32 caracteres. Después inicia SQL Server, la API y React con un solo comando:
+
+```powershell
+docker compose up --build
+```
+
+Cuando los servicios terminen de iniciar estarán disponibles en:
+
+- Aplicación web: `http://localhost:8081`
+- Swagger: `http://localhost:8080/swagger`
+- Estado de la API: `http://localhost:8080/health`
+- SQL Server desde SSMS: servidor `localhost,14330`, autenticación SQL Server, usuario `sa` y la contraseña `DB_PASSWORD` del archivo `.env`.
+
+La API espera a que SQL Server esté disponible y aplica automáticamente las migraciones. Los datos quedan guardados en un volumen de Docker, por lo que no se pierden al detener los contenedores.
+
+Esta configuración está preparada para la demostración y entrega local. Por eso muestra en pantalla el código temporal de recuperación. Antes de exponerla públicamente se debe conectar un servicio de correo, establecer `PasswordReset__ExposeToken=false`, usar secretos nuevos y habilitar HTTPS.
+
+Para detenerlos:
+
+```powershell
+docker compose down
+```
+
+Para ver los mensajes de la API:
+
+```powershell
+docker compose logs -f api
+```
+
+Solo si deseas borrar por completo la base de datos creada por Docker, ejecuta `docker compose down --volumes`. Ese comando elimina permanentemente los datos del volumen.
 
 ## Ejecutar el backend
 
@@ -89,6 +130,6 @@ Los endpoints principales están disponibles en `/api/categories`, `/api/payment
 
 ## Seguridad
 
-Las contraseñas se almacenan usando PBKDF2-SHA256 con salt aleatorio y comparación en tiempo constante. Los códigos de recuperación se guardan únicamente como hash, expiran después de 15 minutos y se invalidan al utilizarlos. En `Development`, la pantalla muestra el código para facilitar las pruebas locales; al publicar deberá conectarse un proveedor de correo y el código nunca se incluirá en la respuesta.
+Las contraseñas se almacenan usando PBKDF2-SHA256 con salt aleatorio y comparación en tiempo constante. Los códigos de recuperación se guardan únicamente como hash, expiran después de 15 minutos y se invalidan al utilizarlos. En desarrollo y en la configuración Docker de demostración, la pantalla muestra el código para facilitar las pruebas locales; al publicar deberá conectarse un proveedor de correo y el código nunca se incluirá en la respuesta.
 
 La clave JWT incluida en `appsettings.json` es exclusivamente para desarrollo y deberá reemplazarse mediante configuración de entorno al publicar.
