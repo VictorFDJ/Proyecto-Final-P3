@@ -46,7 +46,12 @@ public sealed class ExceptionHandlingMiddleware(
         }
         else
         {
-            logger.LogWarning(exception, "Request error. TraceId: {TraceId}", context.TraceIdentifier);
+            logger.LogWarning(
+                "Request rejected with {StatusCode} ({Code}): {Message}. TraceId: {TraceId}",
+                statusCode,
+                code,
+                message,
+                context.TraceIdentifier);
         }
 
         context.Response.StatusCode = statusCode;
