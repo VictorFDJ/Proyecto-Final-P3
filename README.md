@@ -1,6 +1,6 @@
 # Mi Presupuesto
 
-Aplicación para registrar y analizar gastos personales. El backend usa ASP.NET Core Web API, Entity Framework Core, SQL Server, JWT y una arquitectura por capas. El frontend en React se incorporará en el siguiente bloque.
+Aplicación web completa para registrar y analizar gastos personales. El backend usa ASP.NET Core Web API, Entity Framework Core, SQL Server, JWT y una arquitectura por capas. El frontend usa React, TypeScript, Vite y Recharts, con un diseño adaptable a computadoras y celulares.
 
 ## Arquitectura
 
@@ -9,11 +9,13 @@ Aplicación para registrar y analizar gastos personales. El backend usa ASP.NET 
 - `MiPresupuesto.Infrastructure`: EF Core, repositorios, SQL Server, hash PBKDF2 y creación de JWT.
 - `API-MiPresupuesto`: controladores, autenticación y manejo HTTP de errores.
 - `MiPresupuesto.Tests`: pruebas unitarias con xUnit.
+- `Frontend-MiPresupuesto`: interfaz React, rutas protegidas, formularios, gráficas y cliente HTTP de la API.
 
 ## Requisitos locales
 
 - .NET SDK 10.0.301 o compatible.
 - SQL Server LocalDB para desarrollo. La configuración con contenedores se añadirá antes de la entrega.
+- Node.js 22 o compatible y npm.
 
 ## Ejecutar el backend
 
@@ -26,6 +28,26 @@ dotnet run --project .\API-MiPresupuesto\API-MiPresupuesto\API-MiPresupuesto.csp
 ```
 
 Al iniciarse en ambiente Development, la API también aplica automáticamente las migraciones pendientes.
+
+La API queda disponible por defecto en `http://localhost:5044` y su documentación Swagger en `http://localhost:5044/swagger`.
+
+## Ejecutar el frontend
+
+En otra terminal, desde la raíz del repositorio:
+
+```powershell
+cd .\Frontend-MiPresupuesto
+npm install
+npm run dev
+```
+
+Abre `http://localhost:5173`. La dirección de la API se puede cambiar copiando `.env.example` a `.env` y modificando `VITE_API_URL`.
+
+Para comprobar la compilación de producción:
+
+```powershell
+npm run build
+```
 
 ## Pruebas
 
@@ -52,6 +74,12 @@ El archivo `API-MiPresupuesto/API-MiPresupuesto/API-MiPresupuesto.http` contiene
 - Exportación de reportes a JSON, TXT y Excel.
 - Importación masiva de gastos desde Excel con validación y reporte por fila.
 - Plantilla Excel descargable con instrucciones y formato de ejemplo.
+- Interfaz React con registro, login, cierre de sesión y edición segura del perfil.
+- Dashboard con tarjetas de resumen, gráfica diaria, distribución por categorías y estado de presupuestos.
+- Pantallas completas para gastos, categorías, métodos de pago y presupuestos.
+- Formularios con validaciones de la API, mensajes claros, filtros, paginación e importación de Excel.
+- Descarga de reportes JSON, TXT y Excel desde el dashboard.
+- Navegación adaptable a celular y carga diferida de cada pantalla.
 - Aislamiento de todos los recursos por usuario autenticado.
 - Eliminación protegida cuando una categoría o método de pago tiene registros asociados.
 - Respuestas consistentes para errores de validación, conflictos y recursos inexistentes.
