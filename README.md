@@ -47,6 +47,11 @@ El archivo `API-MiPresupuesto/API-MiPresupuesto/API-MiPresupuesto.http` contiene
 - Cálculo de gasto acumulado, porcentaje y restante por presupuesto.
 - Alertas automáticas al 50 %, 80 %, 100 % y al exceder el límite.
 - Reporte mensual de categorías con presupuesto excedido.
+- Reporte mensual con totales, promedio, comparación con el mes anterior y top de categorías.
+- Datos diarios y por categoría preparados para gráficas del dashboard.
+- Exportación de reportes a JSON, TXT y Excel.
+- Importación masiva de gastos desde Excel con validación y reporte por fila.
+- Plantilla Excel descargable con instrucciones y formato de ejemplo.
 - Aislamiento de todos los recursos por usuario autenticado.
 - Eliminación protegida cuando una categoría o método de pago tiene registros asociados.
 - Respuestas consistentes para errores de validación, conflictos y recursos inexistentes.

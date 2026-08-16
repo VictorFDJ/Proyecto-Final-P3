@@ -8,7 +8,10 @@ using MiPresupuesto.Application.Auth;
 using MiPresupuesto.Application.Budgets;
 using MiPresupuesto.Application.Categories;
 using MiPresupuesto.Application.Expenses;
+using MiPresupuesto.Application.Imports;
 using MiPresupuesto.Application.PaymentMethods;
+using MiPresupuesto.Application.Reports;
+using MiPresupuesto.Infrastructure.Files;
 using MiPresupuesto.Infrastructure.Persistence;
 using MiPresupuesto.Infrastructure.Security;
 
@@ -38,6 +41,10 @@ public static class DependencyInjection
         services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
         services.AddScoped<IExpenseRepository, ExpenseRepository>();
         services.AddScoped<IBudgetRepository, BudgetRepository>();
+        services.AddScoped<IReportRepository, ReportRepository>();
+        services.AddSingleton<IReportExporter, ReportExporter>();
+        services.AddScoped<IExpenseImportRepository, ExpenseImportRepository>();
+        services.AddSingleton<IExpenseSpreadsheet, ExpenseSpreadsheet>();
         services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<AppDbContext>());
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();

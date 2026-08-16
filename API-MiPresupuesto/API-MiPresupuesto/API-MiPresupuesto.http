@@ -110,3 +110,27 @@ Authorization: Bearer {{token}}
 ### Presupuestos excedidos
 GET {{host}}/api/budgets/exceeded?year=2026&month=8
 Authorization: Bearer {{token}}
+
+### Reporte mensual para dashboard y gráficas
+GET {{host}}/api/reports/monthly?year=2026&month=8
+Authorization: Bearer {{token}}
+
+### Exportar reporte: cambia xlsx por json o txt
+GET {{host}}/api/reports/monthly/export/xlsx?year=2026&month=8
+Authorization: Bearer {{token}}
+
+### Descargar plantilla de importación
+GET {{host}}/api/expenses/import/template
+Authorization: Bearer {{token}}
+
+### Importar gastos desde Excel
+POST {{host}}/api/expenses/import
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=ImportBoundary
+
+--ImportBoundary
+Content-Disposition: form-data; name="file"; filename="gastos.xlsx"
+Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+
+< ./gastos.xlsx
+--ImportBoundary--
