@@ -75,6 +75,7 @@ El archivo `API-MiPresupuesto/API-MiPresupuesto/API-MiPresupuesto.http` contiene
 - Importación masiva de gastos desde Excel con validación y reporte por fila.
 - Plantilla Excel descargable con instrucciones y formato de ejemplo.
 - Interfaz React con registro, login, cierre de sesión y edición segura del perfil.
+- Recuperación de contraseña con código aleatorio de un solo uso y expiración de 15 minutos.
 - Dashboard con tarjetas de resumen, gráfica diaria, distribución por categorías y estado de presupuestos.
 - Pantallas completas para gastos, categorías, métodos de pago y presupuestos.
 - Formularios con validaciones de la API, mensajes claros, filtros, paginación e importación de Excel.
@@ -88,4 +89,6 @@ Los endpoints principales están disponibles en `/api/categories`, `/api/payment
 
 ## Seguridad
 
-Las contraseñas se almacenan usando PBKDF2-SHA256 con salt aleatorio y comparación en tiempo constante. La clave JWT incluida en `appsettings.json` es exclusivamente para desarrollo y deberá reemplazarse mediante configuración de entorno al publicar.
+Las contraseñas se almacenan usando PBKDF2-SHA256 con salt aleatorio y comparación en tiempo constante. Los códigos de recuperación se guardan únicamente como hash, expiran después de 15 minutos y se invalidan al utilizarlos. En `Development`, la pantalla muestra el código para facilitar las pruebas locales; al publicar deberá conectarse un proveedor de correo y el código nunca se incluirá en la respuesta.
+
+La clave JWT incluida en `appsettings.json` es exclusivamente para desarrollo y deberá reemplazarse mediante configuración de entorno al publicar.

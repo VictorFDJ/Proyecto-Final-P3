@@ -21,5 +21,21 @@ public sealed record LoginRequest(
     string Email,
     [Required(ErrorMessage = "La contraseña es obligatoria.")]
     string Password);
+public sealed record ForgotPasswordRequest(
+    [Required(ErrorMessage = "El correo electrónico es obligatorio.")]
+    [EmailAddress(ErrorMessage = "El correo electrónico no es válido.")]
+    string Email);
+public sealed record ResetPasswordRequest(
+    [Required(ErrorMessage = "El correo electrónico es obligatorio.")]
+    [EmailAddress(ErrorMessage = "El correo electrónico no es válido.")]
+    string Email,
+    [Required(ErrorMessage = "El código de recuperación es obligatorio.")]
+    string Token,
+    [Required(ErrorMessage = "La nueva contraseña es obligatoria.")]
+    [MinLength(8, ErrorMessage = "La contraseña debe tener al menos 8 caracteres.")]
+    [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d).+$",
+        ErrorMessage = "La contraseña debe incluir letras y números.")]
+    string NewPassword);
+public sealed record ForgotPasswordResponse(string Message, string? DevelopmentToken);
 public sealed record AuthResponse(string Token, DateTime ExpiresAtUtc, UserResponse User);
 public sealed record UserResponse(Guid Id, string Name, string Email);

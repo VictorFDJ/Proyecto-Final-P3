@@ -7,7 +7,9 @@ namespace MiPresupuesto.Api.Controllers;
 [ApiController]
 [Route("api/auth")]
 [AllowAnonymous]
-public sealed class AuthController(IAuthService authService) : ControllerBase
+public sealed class AuthController(
+    IAuthService authService,
+    IWebHostEnvironment environment) : ControllerBase
 {
     [HttpPost("register")]
     [ProducesResponseType<AuthResponse>(StatusCodes.Status201Created)]
@@ -51,5 +53,42 @@ public sealed class AuthController(IAuthService authService) : ControllerBase
                 }
             })
             : Ok(response);
+    }
+
+    [HttpPost("forgot-password")]
+    [ProducesResponseType<ForgotPasswordResponse>(StatusCodes.Status200OK)]
+    public async Task<ActionResult<ForgotPasswordResponse>> ForgotPassword(
+        ForgotPasswordRequest request,
+        CancellationToken cancellationToken)
+    {
+        var token = await authService.RequestPasswordResetAsync(request, cancellationToken);
+        return Ok(new ForgotPasswordResponse(
+            "Si el correo está registrado, recibirás instrucciones para restablecer tu contraseña.",
+            environment.IsDevelopment() ? token : null));
+    }
+
+    [HttpPost("reset-password")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> ResetPassword(
+        ResetPasswordRequest request,
+        CancellationToken cancellationToken)
+    {
+        var changed = await authService.ResetPasswordAsync(request, cancellationToken);
+        if (changed)
+        {
+            return NoContent();
+        }
+
+        return BadRequest(new
+        {
+            success = false,
+            error = new
+            {
+                code = "invalid_reset_token",
+                message = "El código de recuperación no es válido o ya expiró.",
+                errors = (object?)null,
+                traceId = HttpContext.TraceIdentifier
+            }
+        });
     }
 }

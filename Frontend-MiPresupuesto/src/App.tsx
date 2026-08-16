@@ -10,6 +10,7 @@ const ExpensesPage = lazy(() => import('./pages/ExpensesPage').then(module => ({
 const CatalogPage = lazy(() => import('./pages/CatalogPage').then(module => ({ default: module.CatalogPage })))
 const BudgetsPage = lazy(() => import('./pages/BudgetsPage').then(module => ({ default: module.BudgetsPage })))
 const ProfilePage = lazy(() => import('./pages/ProfilePage').then(module => ({ default: module.ProfilePage })))
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage').then(module => ({ default: module.ForgotPasswordPage })))
 
 function Protected() {
   const { token } = useAuth()
@@ -20,6 +21,7 @@ export default function App() {
   return <BrowserRouter><Suspense fallback={<Spinner/>}><Routes>
     <Route path="/login" element={<AuthPage mode="login"/>}/>
     <Route path="/registro" element={<AuthPage mode="register"/>}/>
+    <Route path="/recuperar-contrasena" element={<ForgotPasswordPage/>}/>
     <Route element={<Protected/>}>
       <Route index element={<DashboardPage/>}/>
       <Route path="gastos" element={<ExpensesPage/>}/>

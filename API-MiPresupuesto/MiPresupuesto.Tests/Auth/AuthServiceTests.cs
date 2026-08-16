@@ -64,6 +64,71 @@ public sealed class AuthServiceTests
         Assert.Null(response);
     }
 
+    [Fact]
+    public async Task RequestPasswordResetAsync_WithExistingAccount_CreatesTemporaryHashedToken()
+    {
+        var user = CreateUser("ana@example.com", "Clave123");
+        _users.Items.Add(user);
+        var service = CreateService();
+
+        var token = await service.RequestPasswordResetAsync(
+            new ForgotPasswordRequest("ANA@example.com"));
+
+        Assert.NotNull(token);
+        Assert.Equal(64, token.Length);
+        Assert.NotEqual(token, user.PasswordResetTokenHash);
+        Assert.True(user.PasswordResetTokenExpiresAtUtc > DateTime.UtcNow);
+    }
+
+    [Fact]
+    public async Task RequestPasswordResetAsync_WithUnknownAccount_ReturnsNull()
+    {
+        var service = CreateService();
+
+        var token = await service.RequestPasswordResetAsync(
+            new ForgotPasswordRequest("nadie@example.com"));
+
+        Assert.Null(token);
+    }
+
+    [Fact]
+    public async Task ResetPasswordAsync_WithValidToken_ChangesPasswordAndConsumesToken()
+    {
+        var user = CreateUser("ana@example.com", "Clave123");
+        _users.Items.Add(user);
+        var service = CreateService();
+        var token = await service.RequestPasswordResetAsync(
+            new ForgotPasswordRequest("ana@example.com"));
+
+        var changed = await service.ResetPasswordAsync(
+            new ResetPasswordRequest("ana@example.com", token!, "Nueva1234"));
+        var reused = await service.ResetPasswordAsync(
+            new ResetPasswordRequest("ana@example.com", token!, "Otra1234"));
+
+        Assert.True(changed);
+        Assert.False(reused);
+        Assert.True(_passwordHasher.Verify("Nueva1234", user.PasswordHash));
+        Assert.Null(user.PasswordResetTokenHash);
+        Assert.Null(user.PasswordResetTokenExpiresAtUtc);
+    }
+
+    [Fact]
+    public async Task ResetPasswordAsync_WithExpiredToken_ReturnsFalse()
+    {
+        var user = CreateUser("ana@example.com", "Clave123");
+        _users.Items.Add(user);
+        var service = CreateService();
+        var token = await service.RequestPasswordResetAsync(
+            new ForgotPasswordRequest("ana@example.com"));
+        user.PasswordResetTokenExpiresAtUtc = DateTime.UtcNow.AddSeconds(-1);
+
+        var changed = await service.ResetPasswordAsync(
+            new ResetPasswordRequest("ana@example.com", token!, "Nueva1234"));
+
+        Assert.False(changed);
+        Assert.True(_passwordHasher.Verify("Clave123", user.PasswordHash));
+    }
+
     [Theory]
     [InlineData("corta")]
     [InlineData("sololetras")]
