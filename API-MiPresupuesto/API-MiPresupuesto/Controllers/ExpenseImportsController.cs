@@ -15,7 +15,7 @@ public sealed class ExpenseImportsController(IExpenseImportService importService
     [HttpPost]
     [RequestSizeLimit(MaxFileSize)]
     public async Task<ActionResult<ExpenseImportResponse>> Import(
-        [FromForm] IFormFile? file,
+        IFormFile? file,
         CancellationToken cancellationToken)
     {
         if (file is null || file.Length == 0)
