@@ -45,20 +45,20 @@ public sealed class AuthServiceTests
 
         var response = await service.LoginAsync(new LoginRequest("ana@example.com", "Clave123"));
 
+        Assert.NotNull(response);
         Assert.Equal("test-token", response.Token);
         Assert.Equal("ana@example.com", response.User.Email);
     }
 
     [Fact]
-    public async Task LoginAsync_WithWrongPassword_DoesNotRevealWhichFieldFailed()
+    public async Task LoginAsync_WithWrongPassword_ReturnsNull()
     {
         _users.Items.Add(CreateUser("ana@example.com", "Clave123"));
         var service = CreateService();
 
-        var exception = await Assert.ThrowsAsync<UnauthorizedException>(() =>
-            service.LoginAsync(new LoginRequest("ana@example.com", "incorrecta")));
+        var response = await service.LoginAsync(new LoginRequest("ana@example.com", "incorrecta"));
 
-        Assert.Equal("El correo o la contraseña son incorrectos.", exception.Message);
+        Assert.Null(response);
     }
 
     [Theory]

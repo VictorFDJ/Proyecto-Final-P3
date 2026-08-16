@@ -24,5 +24,20 @@ public sealed class AuthController(IAuthService authService) : ControllerBase
     public async Task<ActionResult<AuthResponse>> Login(
         LoginRequest request,
         CancellationToken cancellationToken)
-        => Ok(await authService.LoginAsync(request, cancellationToken));
+    {
+        var response = await authService.LoginAsync(request, cancellationToken);
+        return response is null
+            ? Unauthorized(new
+            {
+                success = false,
+                error = new
+                {
+                    code = "unauthorized",
+                    message = "El correo o la contraseña son incorrectos.",
+                    errors = (object?)null,
+                    traceId = HttpContext.TraceIdentifier
+                }
+            })
+            : Ok(response);
+    }
 }

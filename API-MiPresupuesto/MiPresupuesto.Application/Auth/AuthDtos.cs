@@ -15,6 +15,11 @@ public sealed record RegisterRequest(
     [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d).+$",
         ErrorMessage = "La contraseña debe incluir letras y números.")]
     string Password);
-public sealed record LoginRequest(string Email, string Password);
+public sealed record LoginRequest(
+    [Required(ErrorMessage = "El correo electrónico es obligatorio.")]
+    [EmailAddress(ErrorMessage = "El correo electrónico no es válido.")]
+    string Email,
+    [Required(ErrorMessage = "La contraseña es obligatoria.")]
+    string Password);
 public sealed record AuthResponse(string Token, DateTime ExpiresAtUtc, UserResponse User);
 public sealed record UserResponse(Guid Id, string Name, string Email);

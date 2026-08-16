@@ -36,20 +36,20 @@ public sealed class AuthService(
         return CreateResponse(user);
     }
 
-    public async Task<AuthResponse> LoginAsync(
+    public async Task<AuthResponse?> LoginAsync(
         LoginRequest request,
         CancellationToken cancellationToken = default)
     {
         var email = InputValidator.Email(request.Email);
         if (string.IsNullOrEmpty(request.Password))
         {
-            throw new UnauthorizedException("El correo o la contraseña son incorrectos.");
+            return null;
         }
 
         var user = await users.GetByEmailAsync(email, cancellationToken);
         if (user is null || !passwordHasher.Verify(request.Password, user.PasswordHash))
         {
-            throw new UnauthorizedException("El correo o la contraseña son incorrectos.");
+            return null;
         }
 
         return CreateResponse(user);
