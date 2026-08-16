@@ -56,6 +56,33 @@ public static class InputValidator
         return value;
     }
 
+    public static string? Optional(string? value, string field, int maxLength)
+    {
+        var normalized = value?.Trim();
+        if (string.IsNullOrEmpty(normalized))
+        {
+            return null;
+        }
+
+        if (normalized.Length > maxLength)
+        {
+            Throw(field, $"No puede superar los {maxLength} caracteres.");
+        }
+
+        return normalized;
+    }
+
+    public static string HexColor(string? value)
+    {
+        var color = Optional(value, "color", 7) ?? "#6366F1";
+        if (color.Length != 7 || color[0] != '#' || color[1..].Any(character => !Uri.IsHexDigit(character)))
+        {
+            Throw("color", "El color debe tener el formato hexadecimal #RRGGBB.");
+        }
+
+        return color.ToUpperInvariant();
+    }
+
     [DoesNotReturn]
     private static void Throw(string field, string message) =>
         throw new ValidationException("Revisa los datos enviados.",

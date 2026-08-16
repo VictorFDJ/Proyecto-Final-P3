@@ -45,3 +45,31 @@ Content-Type: application/json
   "currentPassword": "Clave1234",
   "newPassword": "NuevaClave5678"
 }
+
+### Listar categorías activas
+GET {{host}}/api/categories
+Authorization: Bearer {{token}}
+
+### Crear categoría
+POST {{host}}/api/categories
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Alimentación",
+  "color": "#F97316"
+}
+
+### Crear método de pago
+POST {{host}}/api/payment-methods
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Tarjeta",
+  "icon": "credit-card"
+}
+
+### Listar métodos de pago incluyendo inactivos
+GET {{host}}/api/payment-methods?includeInactive=true
+Authorization: Bearer {{token}}

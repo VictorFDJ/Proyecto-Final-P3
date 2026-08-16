@@ -35,6 +35,17 @@ dotnet test .\API-MiPresupuesto\MiPresupuesto.Tests\MiPresupuesto.Tests.csproj
 
 El archivo `API-MiPresupuesto/API-MiPresupuesto/API-MiPresupuesto.http` contiene ejemplos de registro, login y edición de perfil.
 
+## Funcionalidades implementadas
+
+- Registro, inicio de sesión con JWT y edición de perfil.
+- CRUD de categorías con color, estado activo/inactivo y validación de duplicados.
+- CRUD de métodos de pago con icono opcional, estado activo/inactivo y validación de duplicados.
+- Aislamiento de todos los recursos por usuario autenticado.
+- Eliminación protegida cuando una categoría o método de pago tiene registros asociados.
+- Respuestas consistentes para errores de validación, conflictos y recursos inexistentes.
+
+Los endpoints de categorías están disponibles en `/api/categories` y los métodos de pago en `/api/payment-methods`. Ambos requieren el encabezado `Authorization: Bearer {token}`.
+
 ## Seguridad
 
 Las contraseñas se almacenan usando PBKDF2-SHA256 con salt aleatorio y comparación en tiempo constante. La clave JWT incluida en `appsettings.json` es exclusivamente para desarrollo y deberá reemplazarse mediante configuración de entorno al publicar.
