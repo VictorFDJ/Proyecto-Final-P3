@@ -98,6 +98,10 @@ dotnet test .\API-MiPresupuesto\MiPresupuesto.Tests\MiPresupuesto.Tests.csproj
 
 El archivo `API-MiPresupuesto/API-MiPresupuesto/API-MiPresupuesto.http` contiene ejemplos de registro, login y edición de perfil.
 
+## Defensa del proyecto
+
+El archivo [`GUIA-DEFENSA.md`](GUIA-DEFENSA.md) contiene el orden recomendado para la demostración, la explicación de la arquitectura y respuestas breves a preguntas técnicas frecuentes.
+
 ## Funcionalidades implementadas
 
 - Registro, inicio de sesión con JWT y edición de perfil.
